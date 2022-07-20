@@ -13,7 +13,7 @@ const Page = ({ children }: Props) => (
 
 export default memo(Page);
 
-const Container = styled.main`
+const Container = styled.div`
   position: relative;
   width: 100vw;
   height: 100vh;
