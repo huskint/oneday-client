@@ -3,7 +3,9 @@ import type { NextPage } from 'next';
 import Layout from '../ui/components/layout/Layout';
 
 const Home: NextPage = () => (
-  <Layout />
+  <Layout>
+    hello
+  </Layout>
 );
 
 export default Home;
