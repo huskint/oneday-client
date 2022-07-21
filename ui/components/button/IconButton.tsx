@@ -43,7 +43,7 @@ const Container = styled.button<{ backgroundColor: string }>`
 
   &:hover {
     cursor: pointer;
-    background-color: salmon;
+    background-color: #8cbffeba;
   }
 
   &:disabled {
