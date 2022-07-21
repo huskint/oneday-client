@@ -19,8 +19,10 @@ export default memo(Layout);
 
 const Container = styled.main`
   position: absolute;
-  width: 420px;
-  height: 800px;
+  width: 100vw;
+  max-width: 420px;
+  height: 100vh;
+  max-height: 920px;
   background-color: #fff;
   left: 50%;
   top: 50%;
