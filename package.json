@@ -28,12 +28,14 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-lottie-player": "^1.4.3",
+    "shortid": "^2.2.16",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@types/node": "18.0.5",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
+    "@types/shortid": "^0.0.29",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.2",
     "husky": "^8.0.1",
