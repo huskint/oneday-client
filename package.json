@@ -10,7 +10,11 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/lodash": "^4.14.182",
+    "@types/shortid": "^0.0.29",
     "@types/styled-components": "^5.1.25",
+    "axios": "^0.27.2",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-react-app": "^7.0.1",
     "eslint-import-resolver-typescript": "^3.2.6",
@@ -23,6 +27,7 @@
     "eslint-plugin-testing-library": "^5.5.1",
     "eslint-plugin-unused-imports": "^2.0.0",
     "eslint-webpack-plugin": "^3.2.0",
+    "lodash": "^4.17.21",
     "next": "12.2.2",
     "prettier": "^2.7.1",
     "react": "18.2.0",
