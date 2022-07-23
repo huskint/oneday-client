@@ -16,6 +16,6 @@ export default memo(Page);
 const Container = styled.div`
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background-color: #f3f3f3;
 `;
