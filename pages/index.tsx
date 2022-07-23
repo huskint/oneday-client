@@ -5,13 +5,13 @@ import Lottie from 'react-lottie-player';
 
 import Layout from '../ui/components/layout/Layout';
 import IconButton from '../ui/components/button/IconButton';
-import SnowWeaher from '../ui/lottie/snow-weather.json';
+import SnowWeather from '../ui/lottie/snow-weather.json';
 
 const Home: NextPage = () => (
   <Layout>
     <BackgroundContainer>
       <Lottie
-        animationData={SnowWeaher}
+        animationData={SnowWeather}
         play
         style={{ width: '100%', height: '100%' }}
       />
