@@ -9,6 +9,7 @@ import SnowWeather from '../ui/lottie/snow-weather.json';
 import useLockBodyScroll from '../lib/hooks/useLockBodyScroll';
 
 const Home: NextPage = () => {
+  console.log('');
   useLockBodyScroll();
 
   return (
