@@ -6,9 +6,10 @@ import useWindowSize from '../../../lib/hooks/useWindowSize';
 
 interface Props {
   children?: React.ReactNode;
+  [k: string]: any;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children, ...props }: Props) => {
   const { height } = useWindowSize();
 
   const setScreenSize = () => {
@@ -22,7 +23,7 @@ const Layout = ({ children }: Props) => {
 
   return (
     <Page>
-      <Container>
+      <Container {...props}>
         {children}
       </Container>
     </Page>

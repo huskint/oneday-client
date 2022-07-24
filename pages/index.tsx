@@ -1,5 +1,6 @@
 import React from 'react';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Lottie from 'react-lottie-player';
 
@@ -9,11 +10,15 @@ import SnowWeather from '../ui/lottie/snow-weather.json';
 import useLockBodyScroll from '../lib/hooks/useLockBodyScroll';
 
 const Home: NextPage = () => {
-  console.log('');
   useLockBodyScroll();
+  const router = useRouter();
+
+  const handleClickSignIn = () => {
+    router.push('/signin');
+  };
 
   return (
-    <Layout>
+    <Container>
       <BackgroundContainer>
         <Lottie
           animationData={SnowWeather}
@@ -32,6 +37,7 @@ const Home: NextPage = () => {
               height="20"
             />
           }
+          onClick={handleClickSignIn}
         >
           이메일로 로그인
         </IconButton>
@@ -49,11 +55,15 @@ const Home: NextPage = () => {
           카카오톡 로그인
         </IconButton>
       </ButtonContainer>
-    </Layout>
+    </Container>
   );
 };
 
 export default Home;
+
+const Container = styled(Layout)`
+  background-color: #5a8fcd;
+`;
 
 const BackgroundContainer = styled.div`
   position: absolute;

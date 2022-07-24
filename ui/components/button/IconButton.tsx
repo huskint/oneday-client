@@ -5,6 +5,7 @@ interface Props {
   backgroundColor?: string;
   disabled?: boolean;
   icon?: React.ReactNode;
+  onClick?: () => void;
   children: React.ReactNode;
 }
 
@@ -12,11 +13,13 @@ const IconButton = ({
   backgroundColor = 'f4f4f4',
   disabled = false,
   icon,
+  onClick,
   children,
 }: Props) => (
   <Container
-      backgroundColor={backgroundColor}
-      disabled={disabled}
+    backgroundColor={backgroundColor}
+    disabled={disabled}
+    onClick={onClick}
   >
     {
         icon && (
