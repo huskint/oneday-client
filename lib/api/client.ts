@@ -1,7 +1,10 @@
 import axios, { AxiosInstance } from 'axios';
 
+const { SERVER_HOST, SERVER_PORT } = process.env;
+const baseURL = `${SERVER_HOST}:${SERVER_PORT}/api`;
+
 export const client: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:9000/api',
+  baseURL,
 });
 
 const API_DEFAULT_TIMEOUT = 30 * 1000;
