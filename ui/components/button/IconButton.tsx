@@ -10,7 +10,7 @@ interface Props {
 }
 
 const IconButton = ({
-  backgroundColor = 'f4f4f4',
+  backgroundColor = '#f4f4f4',
   disabled = false,
   icon,
   onClick,
@@ -46,6 +46,7 @@ const Container = styled.button<{ backgroundColor: string }>`
   background-color: ${(props) => `${props.backgroundColor}ba`};
   border-radius: 8px;
   border: none;
+  transition: all 300ms;
   
   &:hover {
     cursor: pointer;
