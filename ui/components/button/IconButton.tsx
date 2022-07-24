@@ -9,19 +9,22 @@ interface Props {
 }
 
 const IconButton = ({
-  backgroundColor = 'pink',
+  backgroundColor = 'f4f4f4',
   disabled = false,
   icon,
   children,
 }: Props) => (
-  <Container backgroundColor={backgroundColor} disabled={disabled}>
+  <Container
+      backgroundColor={backgroundColor}
+      disabled={disabled}
+  >
     {
-      icon && (
-        <IconContainer>
-          {icon}
-        </IconContainer>
-      )
-    }
+        icon && (
+          <IconContainer>
+            {icon}
+          </IconContainer>
+        )
+      }
     <span>{children}</span>
   </Container>
 );
@@ -37,13 +40,13 @@ const Container = styled.button<{ backgroundColor: string }>`
   width: 100%;
   height: 54px;
   color: white;
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => `${props.backgroundColor}ba`};
   border-radius: 8px;
   border: none;
-
+  
   &:hover {
     cursor: pointer;
-    background-color: #8cbffeba;
+    background-color: ${(props) => props.backgroundColor};
   }
 
   &:disabled {
