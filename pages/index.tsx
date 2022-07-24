@@ -22,7 +22,7 @@ const Home: NextPage = () => {
       </BackgroundContainer>
       <ButtonContainer>
         <IconButton
-          backgroundColor="#a2cbfdba"
+          backgroundColor="#a2cbfd"
           icon={
             <img
               src="/images/icon/email.svg"
@@ -38,10 +38,10 @@ const Home: NextPage = () => {
           backgroundColor="#f7e10e"
           icon={
             <img
-              src="/images/icon/email.svg"
-              alt="이메일 아이콘"
-              width="20"
-              height="20"
+              src="/images/icon/kakao.svg"
+              alt="카카오톡 아이콘"
+              width="15"
+              height="15"
             />
           }
         >
