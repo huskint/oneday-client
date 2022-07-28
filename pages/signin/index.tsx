@@ -1,9 +1,23 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent, memo, useMemo, useState,
+} from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import Layout from '../../ui/components/layout/Layout';
 import getValidationUser from '../../lib/utils/getValidationUser';
+import { requestPost } from '../../lib/api/client';
+import alert from '../../ui/components/alert/Alert';
+
+interface User {
+  disabled: number;
+  email: string;
+  id: number;
+  name: string;
+  role: number;
+  type: number;
+  user_token: string;
+}
 
 const Index = () => {
   const router = useRouter();
@@ -38,7 +52,28 @@ const Index = () => {
     });
   };
 
-  console.log(userValidation);
+  const onClickSignIn = async () => {
+    try {
+      const userInfo = await requestPost({
+        url: '/user/signin',
+        data: {
+          email: user.email,
+          password: user.password,
+        },
+      });
+      const userData: User = userInfo.data.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (e) {
+      alert.success({
+        title: '로그인에 실패했어요.',
+        desc: '회원 정보가 올바르지 않아요.',
+      });
+    }
+  };
+
+  const handleClickSignUp = () => {
+    router.push('/signup');
+  };
 
   return (
     <Layout>
@@ -58,14 +93,22 @@ const Index = () => {
           <Input name="password" value={user.password} onChange={onChangeUser} />
         </InputContainer>
         <ButtonContainer>
-          <SignInButton disabled={isUserValidation}>로그인</SignInButton>
+          <SignInButton
+            disabled={isUserValidation}
+            onClick={onClickSignIn}
+          >
+            로그인
+          </SignInButton>
         </ButtonContainer>
+        <SignUpContainer>회원이 아니신가요?
+          <SignUpButton onClick={handleClickSignUp}>회원가입</SignUpButton>
+        </SignUpContainer>
       </FormContainer>
     </Layout>
   );
 };
 
-export default Index;
+export default memo(Index);
 
 const Header = styled.header`
   width: 100%;
@@ -158,4 +201,20 @@ const SignInButton = styled.button`
     cursor: not-allowed;
     background-color: #b2b2b280;
   }
+`;
+
+const SignUpContainer = styled.article`
+  text-align: center;
+  color: black;
+  font-size: 14px;
+`;
+
+const SignUpButton = styled.button`
+  border: none;
+  background-color: #fff;
+  margin-top: 60px;
+  color: #4e61ff !important;
+  cursor: pointer !important;
+  text-decoration: underline;
+  text-underline-position: under;
 `;
