@@ -1,9 +1,23 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent, memo, useMemo, useState,
+} from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import Layout from '../../ui/components/layout/Layout';
 import getValidationUser from '../../lib/utils/getValidationUser';
+import { requestPost } from '../../lib/api/client';
+import alert from '../../ui/components/alert/Alert';
+
+interface User {
+  disabled: number;
+  email: string;
+  id: number;
+  name: string;
+  role: number;
+  type: number;
+  user_token: string;
+}
 
 const Index = () => {
   const router = useRouter();
@@ -38,7 +52,24 @@ const Index = () => {
     });
   };
 
-  console.log(userValidation);
+  const onClickSignIn = async () => {
+    try {
+      const userInfo = await requestPost({
+        url: '/user/signin',
+        data: {
+          email: user.email,
+          password: user.password,
+        },
+      });
+      const userData: User = userInfo.data.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (e) {
+      alert.success({
+        title: '로그인에 실패했어요.',
+        desc: '회원 정보가 올바르지 않아요.',
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -58,14 +89,19 @@ const Index = () => {
           <Input name="password" value={user.password} onChange={onChangeUser} />
         </InputContainer>
         <ButtonContainer>
-          <SignInButton disabled={isUserValidation}>로그인</SignInButton>
+          <SignInButton
+            disabled={isUserValidation}
+            onClick={onClickSignIn}
+          >
+            로그인
+          </SignInButton>
         </ButtonContainer>
       </FormContainer>
     </Layout>
   );
 };
 
-export default Index;
+export default memo(Index);
 
 const Header = styled.header`
   width: 100%;
