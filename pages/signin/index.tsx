@@ -71,6 +71,10 @@ const Index = () => {
     }
   };
 
+  const handleClickSignUp = () => {
+    router.push('/signup');
+  };
+
   return (
     <Layout>
       <Header>
@@ -96,6 +100,9 @@ const Index = () => {
             로그인
           </SignInButton>
         </ButtonContainer>
+        <SignUpContainer>회원이 아니신가요?
+          <SignUpButton onClick={handleClickSignUp}>회원가입</SignUpButton>
+        </SignUpContainer>
       </FormContainer>
     </Layout>
   );
@@ -116,7 +123,7 @@ const Prev = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  
+
   & > img {
     width: 30px;
     height: 30px;
@@ -161,7 +168,7 @@ const Input = styled.input`
   border: 1px solid rgb(229, 232, 234);
   border-radius: 8px;
   padding: 0 20px;
-  
+
   &:focus-visible {
     outline: #a2cbfdba solid 0.5px;
   }
@@ -194,4 +201,20 @@ const SignInButton = styled.button`
     cursor: not-allowed;
     background-color: #b2b2b280;
   }
+`;
+
+const SignUpContainer = styled.article`
+  text-align: center;
+  color: black;
+  font-size: 14px;
+`;
+
+const SignUpButton = styled.button`
+  border: none;
+  background-color: #fff;
+  margin-top: 60px;
+  color: #4e61ff !important;
+  cursor: pointer !important;
+  text-decoration: underline;
+  text-underline-position: under;
 `;
