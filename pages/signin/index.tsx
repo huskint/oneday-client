@@ -123,7 +123,7 @@ const Prev = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-
+  
   & > img {
     width: 30px;
     height: 30px;
@@ -168,7 +168,7 @@ const Input = styled.input`
   border: 1px solid rgb(229, 232, 234);
   border-radius: 8px;
   padding: 0 20px;
-
+  
   &:focus-visible {
     outline: #a2cbfdba solid 0.5px;
   }
