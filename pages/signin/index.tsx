@@ -63,8 +63,9 @@ const Index = () => {
       });
       const userData: User = userInfo.data.data.user;
       localStorage.setItem('user', JSON.stringify(userData));
+      router.push('/main/calendar');
     } catch (e) {
-      alert.success({
+      alert.error({
         title: '로그인에 실패했어요.',
         desc: '회원 정보가 올바르지 않아요.',
       });
@@ -85,12 +86,12 @@ const Index = () => {
       <Heading>어떤 하루를 시작합니다.</Heading>
       <FormContainer>
         <InputContainer>
-          <InputLabel>이메일</InputLabel>
-          <Input name="email" value={user.email} onChange={onChangeUser} />
+          <InputLabel htmlFor="email">이메일</InputLabel>
+          <Input id="email" name="email" value={user.email} onChange={onChangeUser} />
         </InputContainer>
         <InputContainer>
-          <InputLabel>비밀번호</InputLabel>
-          <Input name="password" value={user.password} onChange={onChangeUser} />
+          <InputLabel htmlFor="password">비밀번호</InputLabel>
+          <Input id="password" name="password" type="password" value={user.password} onChange={onChangeUser} />
         </InputContainer>
         <ButtonContainer>
           <SignInButton
