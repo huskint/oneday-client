@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent, useCallback, useMemo, useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
@@ -6,6 +8,7 @@ import Layout from '../../ui/components/layout/Layout';
 import alert from '../../ui/components/alert/Alert';
 import getValidationUser from '../../lib/utils/getValidationUser';
 import { requestPost } from '../../lib/api/client';
+import AuthContainer from '../../ui/components/form/auth/AuthContainer';
 
 interface User {
   email: string;
@@ -39,11 +42,11 @@ const Index = () => {
 
   const isUserValidation = useMemo(() => (userValidation.email && userValidation.password && userValidation.passwordCheck && userValidation.name) === false, [userValidation]);
 
-  const handleClickPrev = () => {
+  const handleClickPrev = useCallback(() => {
     router.back();
-  };
+  }, []);
 
-  const onChangeUser = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeUser = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const regexpCheckList = ['email', 'password', 'name'];
     let test: boolean = false;
@@ -63,9 +66,9 @@ const Index = () => {
       ...userValidation,
       [name]: test,
     });
-  };
+  }, [user, userValidation]);
 
-  const onClickSignUp = async () => {
+  const onClickSignUp = useCallback(async () => {
     try {
       const userInfo = await requestPost({
         url: '/user/signup',
@@ -88,7 +91,7 @@ const Index = () => {
         desc: '계속 문제가 발생하면 관리자에게 문의해 주세요.',
       });
     }
-  };
+  }, [user]);
 
   return (
     <Layout>
@@ -99,54 +102,54 @@ const Index = () => {
       </Header>
       <Heading>회원가입</Heading>
       <FormContainer>
-        <InputContainer>
-          <InputLabel htmlFor="email">이메일</InputLabel>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={user.email}
-            onChange={onChangeUser}
-            isError={user.email.length > 0 && !userValidation.email}
-          />
-          {user.email.length > 0 && !userValidation.email && <ErrorMsg>이메일 형식이 올바르지 않습니다.</ErrorMsg>}
-        </InputContainer>
-        <InputContainer>
-          <InputLabel htmlFor="password">비밀번호</InputLabel>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            value={user.password}
-            onChange={onChangeUser}
-            isError={user.password.length > 0 && !userValidation.password}
-          />
-          {user.password.length > 0 && !userValidation.password && <ErrorMsg>8글자 이상 입력해 주세요.</ErrorMsg>}
-        </InputContainer>
-        <InputContainer>
-          <InputLabel htmlFor="passwordCheck">비밀번호 확인</InputLabel>
-          <Input
-            id="passwordCheck"
-            name="passwordCheck"
-            type="password"
-            value={user.passwordCheck}
-            onChange={onChangeUser}
-            isError={user.passwordCheck.length > 0 && !userValidation.passwordCheck}
-          />
-          {user.passwordCheck.length > 0 && !userValidation.passwordCheck && <ErrorMsg>비밀번호가 동일하지 않습니다.</ErrorMsg>}
-        </InputContainer>
-        <InputContainer>
-          <InputLabel htmlFor="name">닉네임</InputLabel>
-          <Input
-            id="name"
-            name="name"
-            value={user.name}
-            onChange={onChangeUser}
-            isError={user.name.length > 0 && !userValidation.name}
-          />
-          {user.name.length > 0 && !userValidation.name && <ErrorMsg>닉네임 형식이 올바르지 않습니다.</ErrorMsg>}
-        </InputContainer>
-
+        <AuthContainer
+          label="이메일"
+          id="email"
+          type="email"
+          value={user.email}
+          validation={userValidation.email}
+          onChange={onChangeUser}
+          error={{
+            isError: user.email.length > 0 && !userValidation.email,
+            message: '이메일 형식이 올바르지 않습니다.',
+          }}
+        />
+        <AuthContainer
+          label="비밀번호"
+          id="password"
+          type="password"
+          value={user.password}
+          validation={userValidation.password}
+          onChange={onChangeUser}
+          error={{
+            isError: user.password.length > 0 && !userValidation.password,
+            message: '8글자 이상 입력해 주세요.',
+          }}
+        />
+        <AuthContainer
+          label="비밀번호 확인"
+          id="passwordCheck"
+          type="password"
+          value={user.passwordCheck}
+          validation={userValidation.passwordCheck}
+          onChange={onChangeUser}
+          error={{
+            isError: user.passwordCheck.length > 0 && !userValidation.passwordCheck,
+            message: '비밀번호가 동일하지 않습니다.',
+          }}
+        />
+        <AuthContainer
+          label="닉네임"
+          id="name"
+          type="text"
+          value={user.name}
+          validation={userValidation.name}
+          onChange={onChangeUser}
+          error={{
+            isError: user.name.length > 0 && !userValidation.name,
+            message: '닉네임 형식이 올바르지 않습니다.',
+          }}
+        />
         <SignUpCheckContainer>
           <Check>
             <CheckBoxLabel>
