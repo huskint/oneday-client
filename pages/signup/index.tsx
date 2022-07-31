@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import Layout from '../../ui/components/layout/Layout';
 import alert from '../../ui/components/alert/Alert';
-import { requestPost } from '../../lib/api/client';
 import getValidationUser from '../../lib/utils/getValidationUser';
+import { requestPost } from '../../lib/api/client';
 
 interface User {
   email: string;
@@ -68,17 +68,25 @@ const Index = () => {
   const onClickSignUp = async () => {
     try {
       const userInfo = await requestPost({
-        url: '',
+        url: '/user/signup',
         data: {
           email: user.email,
           password: user.password,
+          name: user.name,
         },
       });
-      alert.success({
+      const userData: User = userInfo.data.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+      await alert.congrats({
         title: '가입을 환영합니다.',
+        desc: '어떤 하루를 기록해 보세요.',
       });
+      router.push('/main/calendar');
     } catch (e) {
-      console.error(e);
+      alert.error({
+        title: '회원가입에 실패했어요.',
+        desc: '계속 문제가 발생하면 관리자에게 문의해 주세요.',
+      });
     }
   };
 
@@ -92,8 +100,9 @@ const Index = () => {
       <Heading>회원가입</Heading>
       <FormContainer>
         <InputContainer>
-          <InputLabel>이메일</InputLabel>
+          <InputLabel htmlFor="email">이메일</InputLabel>
           <Input
+            id="email"
             name="email"
             type="email"
             value={user.email}
@@ -103,8 +112,9 @@ const Index = () => {
           {user.email.length > 0 && !userValidation.email && <ErrorMsg>이메일 형식이 올바르지 않습니다.</ErrorMsg>}
         </InputContainer>
         <InputContainer>
-          <InputLabel>비밀번호</InputLabel>
+          <InputLabel htmlFor="password">비밀번호</InputLabel>
           <Input
+            id="password"
             name="password"
             type="password"
             value={user.password}
@@ -114,8 +124,9 @@ const Index = () => {
           {user.password.length > 0 && !userValidation.password && <ErrorMsg>8글자 이상 입력해 주세요.</ErrorMsg>}
         </InputContainer>
         <InputContainer>
-          <InputLabel>비밀번호 확인</InputLabel>
+          <InputLabel htmlFor="passwordCheck">비밀번호 확인</InputLabel>
           <Input
+            id="passwordCheck"
             name="passwordCheck"
             type="password"
             value={user.passwordCheck}
@@ -125,8 +136,9 @@ const Index = () => {
           {user.passwordCheck.length > 0 && !userValidation.passwordCheck && <ErrorMsg>비밀번호가 동일하지 않습니다.</ErrorMsg>}
         </InputContainer>
         <InputContainer>
-          <InputLabel>닉네임</InputLabel>
+          <InputLabel htmlFor="name">닉네임</InputLabel>
           <Input
+            id="name"
             name="name"
             value={user.name}
             onChange={onChangeUser}
