@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent, memo, useMemo, useState,
+  ChangeEvent, memo, useMemo, useState, KeyboardEvent, useCallback,
 } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import Layout from '../../ui/components/layout/Layout';
 import getValidationUser from '../../lib/utils/getValidationUser';
 import { requestPost } from '../../lib/api/client';
 import alert from '../../ui/components/alert/Alert';
+import AuthContainer from '../../ui/components/form/auth/AuthContainer';
 
 interface User {
   disabled: number;
@@ -33,11 +34,11 @@ const Index = () => {
 
   const isUserValidation = useMemo(() => (userValidation.email && userValidation.password) === false, [userValidation]);
 
-  const handleClickPrev = () => {
+  const handleClickPrev = useCallback(() => {
     router.back();
-  };
+  }, []);
 
-  const onChangeUser = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeUser = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const regexp = getValidationUser(name as 'email' | 'password' | 'name', value);
 
@@ -50,9 +51,9 @@ const Index = () => {
       ...userValidation,
       [name]: regexp,
     });
-  };
+  }, [user, userValidation]);
 
-  const onClickSignIn = async () => {
+  const onClickSignIn = useCallback(async () => {
     try {
       const userInfo = await requestPost({
         url: '/user/signin',
@@ -70,11 +71,17 @@ const Index = () => {
         desc: '회원 정보가 올바르지 않아요.',
       });
     }
-  };
+  }, [user]);
 
-  const handleClickSignUp = () => {
+  const handleClickSignUp = useCallback(() => {
     router.push('/signup');
-  };
+  }, []);
+
+  const onPressEnter = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !isUserValidation) {
+      onClickSignIn();
+    }
+  }, [isUserValidation, onClickSignIn]);
 
   return (
     <Layout>
@@ -85,14 +92,21 @@ const Index = () => {
       </Header>
       <Heading>어떤 하루를 시작합니다.</Heading>
       <FormContainer>
-        <InputContainer>
-          <InputLabel htmlFor="email">이메일</InputLabel>
-          <Input id="email" name="email" value={user.email} onChange={onChangeUser} />
-        </InputContainer>
-        <InputContainer>
-          <InputLabel htmlFor="password">비밀번호</InputLabel>
-          <Input id="password" name="password" type="password" value={user.password} onChange={onChangeUser} />
-        </InputContainer>
+        <AuthContainer
+          label="이메일"
+          id="email"
+          type="email"
+          value={user.email}
+          onChange={onChangeUser}
+        />
+        <AuthContainer
+          label="비밀번호"
+          id="password"
+          type="password"
+          value={user.password}
+          onChange={onChangeUser}
+          onKeyPress={onPressEnter}
+        />
         <ButtonContainer>
           <SignInButton
             disabled={isUserValidation}
