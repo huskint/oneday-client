@@ -4,11 +4,11 @@ import React, {
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import Layout from '../../ui/components/layout/Layout';
-import alert from '../../ui/components/alert/Alert';
-import getValidationUser from '../../lib/utils/getValidationUser';
-import { requestPost } from '../../lib/api/client';
-import AuthContainer from '../../ui/components/form/auth/AuthContainer';
+import Layout from '@components/layout/Layout';
+import alert from '@components/alert/Alert';
+import getValidationUser from '@lib/utils/getValidationUser';
+import { requestPost } from '@lib/api/client';
+import AuthContainer from '@components/form/auth/AuthContainer';
 
 interface User {
   email: string;

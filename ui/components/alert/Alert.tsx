@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 import Lottie from 'react-lottie-player';
 import styled from 'styled-components';
 
+import { mountRootId } from '@lib/utils/generateUniqueString';
+
 import AlertContainer from './AlertConfig';
 import Portal from '../portal/Portal';
 import Success from '../../lottie/alert-success.json';
 import Error from '../../lottie/alert-error.json';
 import Congrats from '../../lottie/alert-congrats.json';
-import { mountRootId } from '../../../lib/utils/generateUniqueString';
 
 const Alert = async (options: any): Promise<boolean> => {
   const mount = await document.getElementById(mountRootId);

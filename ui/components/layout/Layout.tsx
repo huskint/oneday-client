@@ -1,8 +1,9 @@
 import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 
+import useWindowSize from '@lib/hooks/useWindowSize';
+
 import Page from './Page';
-import useWindowSize from '../../../lib/hooks/useWindowSize';
 
 interface Props {
   children?: React.ReactNode;
