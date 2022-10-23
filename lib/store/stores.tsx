@@ -1,13 +1,17 @@
 import { createContext, useContext } from 'react';
 
-const stores = {};
+import userStore from '@lib/store/userStore';
 
-const storeContext = createContext(stores);
-
-export const storeProvider = ({ children }: any) => {
-  <storeContext.Provider value={stores}>
-    {children}
-  </storeContext.Provider>;
+const stores = {
+  userStore,
 };
 
-export const useStore = () => useContext(storeContext);
+const StoreContext = createContext(stores);
+
+export const StoreProvider = ({ children }: any) => (
+  <StoreContext.Provider value={stores}>
+    {children}
+  </StoreContext.Provider>
+);
+
+export const useStore = () => useContext(StoreContext);
