@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import Lottie from 'react-lottie-player';
 
-import Layout from '../ui/components/layout/Layout';
-import IconButton from '../ui/components/button/IconButton';
-import SnowWeather from '../ui/lottie/snow-weather.json';
-import useLockBodyScroll from '../lib/hooks/useLockBodyScroll';
+import Layout from '@components/layout/Layout';
+import IconButton from '@components/button/IconButton';
+import SnowWeather from '@ui/lottie/snow-weather.json';
+import useLockBodyScroll from '@lib/hooks/useLockBodyScroll';
 
 const Home: NextPage = () => {
   useLockBodyScroll();

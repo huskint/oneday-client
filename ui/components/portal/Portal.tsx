@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-import { mountRootId } from '../../../lib/utils/generateUniqueString';
+import { mountRootId } from '@lib/utils/generateUniqueString';
 
 interface Props {
   children: React.ReactNode;

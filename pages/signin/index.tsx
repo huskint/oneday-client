@@ -4,11 +4,11 @@ import React, {
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-import Layout from '../../ui/components/layout/Layout';
-import getValidationUser from '../../lib/utils/getValidationUser';
-import { requestPost } from '../../lib/api/client';
-import alert from '../../ui/components/alert/Alert';
-import AuthContainer from '../../ui/components/form/auth/AuthContainer';
+import getValidationUser from '@lib/utils/getValidationUser';
+import { requestPost } from '@lib/api/client';
+import alert from '@components/alert/Alert';
+import AuthContainer from '@components/form/auth/AuthContainer';
+import Layout from '@components/layout/Layout';
 
 interface User {
   disabled: number;
@@ -138,7 +138,7 @@ const Prev = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  
+
   & > img {
     width: 30px;
     height: 30px;
@@ -183,7 +183,7 @@ const Input = styled.input`
   border: 1px solid rgb(229, 232, 234);
   border-radius: 8px;
   padding: 0 20px;
-  
+
   &:focus-visible {
     outline: #a2cbfdba solid 0.5px;
   }
