@@ -1,46 +1,20 @@
 import React, {
-  ChangeEvent, useCallback, useMemo, useState,
+  ChangeEvent, useCallback, useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 import Layout from '@components/layout/Layout';
 import alert from '@components/alert/Alert';
-import getValidationUser from '@lib/utils/getValidationUser';
-import { requestPost } from '@lib/api/client';
 import AuthContainer from '@components/form/auth/AuthContainer';
-
-interface User {
-  email: string;
-  password: string;
-  passwordCheck: string;
-  name: string;
-}
-
-interface UserValidation {
-  email: boolean;
-  password: boolean;
-  passwordCheck: boolean;
-  name: boolean;
-}
+import { useStores } from '@lib/store/stores';
 
 const Index = () => {
   const router = useRouter();
-  const [user, setUser] = useState<User>({
-    email: '',
-    password: '',
-    passwordCheck: '',
-    name: '',
-  });
+  const { userStore } = useStores();
 
-  const [userValidation, setUserValidation] = useState<UserValidation>({
-    email: false,
-    password: false,
-    passwordCheck: false,
-    name: false,
-  });
-
-  const isUserValidation = useMemo(() => (userValidation.email && userValidation.password && userValidation.passwordCheck && userValidation.name) === false, [userValidation]);
+  const isDisabledSignUp = useMemo(() => !(userStore.userValidation.email && userStore.userValidation.password && userStore.userValidation.passwordCheck && userStore.userValidation.name), [userStore.userValidation]);
 
   const handleClickPrev = useCallback(() => {
     router.back();
@@ -48,50 +22,24 @@ const Index = () => {
 
   const onChangeUser = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const regexpCheckList = ['email', 'password', 'name'];
-    let test: boolean = false;
-    if (regexpCheckList.includes(name)) {
-      test = getValidationUser(name as 'email' | 'password' | 'name', value);
-    }
-    if (name === 'passwordCheck') {
-      test = user.password === value;
-    }
-
-    setUser({
-      ...user,
-      [name]: value,
-    });
-
-    setUserValidation({
-      ...userValidation,
-      [name]: test,
-    });
-  }, [user, userValidation]);
+    userStore.onChangeSignUp(name, value);
+  }, [userStore.user, userStore.userValidation]);
 
   const onClickSignUp = useCallback(async () => {
-    try {
-      const userInfo = await requestPost({
-        url: '/user/signup',
-        data: {
-          email: user.email,
-          password: user.password,
-          name: user.name,
-        },
-      });
-      const userData: User = userInfo.data.data.user;
-      localStorage.setItem('user', JSON.stringify(userData));
+    const isSignUp = await userStore.signupUser();
+    if (isSignUp) {
       await alert.congrats({
         title: '가입을 환영합니다.',
         desc: '어떤 하루를 기록해 보세요.',
       });
       router.push('/main/calendar');
-    } catch (e) {
-      alert.error({
-        title: '회원가입에 실패했어요.',
-        desc: '계속 문제가 발생하면 관리자에게 문의해 주세요.',
-      });
+      return;
     }
-  }, [user]);
+    alert.error({
+      title: '회원가입에 실패했어요.',
+      desc: '계속 문제가 발생하면 관리자에게 문의해 주세요.',
+    });
+  }, []);
 
   return (
     <Layout>
@@ -106,11 +54,11 @@ const Index = () => {
           label="이메일"
           id="email"
           type="email"
-          value={user.email}
-          validation={userValidation.email}
+          value={userStore.signUser.email}
+          validation={userStore.userValidation.email}
           onChange={onChangeUser}
           error={{
-            isError: user.email.length > 0 && !userValidation.email,
+            isError: userStore.signUser.email.length > 0 && !userStore.userValidation.email,
             message: '이메일 형식이 올바르지 않습니다.',
           }}
         />
@@ -118,11 +66,11 @@ const Index = () => {
           label="비밀번호"
           id="password"
           type="password"
-          value={user.password}
-          validation={userValidation.password}
+          value={userStore.signUser.password}
+          validation={userStore.userValidation.password}
           onChange={onChangeUser}
           error={{
-            isError: user.password.length > 0 && !userValidation.password,
+            isError: userStore.signUser.password.length > 0 && !userStore.userValidation.password,
             message: '8글자 이상 입력해 주세요.',
           }}
         />
@@ -130,11 +78,11 @@ const Index = () => {
           label="비밀번호 확인"
           id="passwordCheck"
           type="password"
-          value={user.passwordCheck}
-          validation={userValidation.passwordCheck}
+          value={userStore.signUser.passwordCheck as string}
+          validation={userStore.userValidation.passwordCheck}
           onChange={onChangeUser}
           error={{
-            isError: user.passwordCheck.length > 0 && !userValidation.passwordCheck,
+            isError: (userStore.signUser.passwordCheck as string).length > 0 && !userStore.userValidation.passwordCheck,
             message: '비밀번호가 동일하지 않습니다.',
           }}
         />
@@ -142,11 +90,11 @@ const Index = () => {
           label="닉네임"
           id="name"
           type="text"
-          value={user.name}
-          validation={userValidation.name}
+          value={userStore.signUser.name as string}
+          validation={userStore.userValidation.name}
           onChange={onChangeUser}
           error={{
-            isError: user.name.length > 0 && !userValidation.name,
+            isError: (userStore.signUser.name as string).length > 0 && !userStore.userValidation.name,
             message: '닉네임 형식이 올바르지 않습니다.',
           }}
         />
@@ -161,7 +109,7 @@ const Index = () => {
 
         <ButtonContainer>
           <SignUpButton
-            disabled={isUserValidation}
+            disabled={isDisabledSignUp}
             onClick={onClickSignUp}
           >
             회원가입
@@ -172,7 +120,7 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default observer(Index);
 
 const Header = styled.header`
   width: 100%;

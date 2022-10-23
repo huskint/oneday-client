@@ -9,6 +9,7 @@ import { requestPost } from '@lib/api/client';
 import alert from '@components/alert/Alert';
 import AuthContainer from '@components/form/auth/AuthContainer';
 import Layout from '@components/layout/Layout';
+import { useStores } from '@lib/store/stores';
 
 interface User {
   disabled: number;
@@ -22,6 +23,8 @@ interface User {
 
 const Index = () => {
   const router = useRouter();
+  const { userStore } = useStores();
+
   const [user, setUser] = useState<{ email: string, password: string }>({
     email: '',
     password: '',

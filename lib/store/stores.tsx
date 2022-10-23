@@ -14,4 +14,4 @@ export const StoreProvider = ({ children }: any) => (
   </StoreContext.Provider>
 );
 
-export const useStore = () => useContext(StoreContext);
+export const useStores = () => useContext(StoreContext);
