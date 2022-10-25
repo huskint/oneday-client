@@ -11,7 +11,7 @@ import AuthContainer from '@components/form/auth/AuthContainer';
 import Layout from '@components/layout/Layout';
 import { useStores } from '@lib/store/stores';
 
-const Index = () => {
+const Signin = () => {
   const router = useRouter();
   const { userStore } = useStores();
 
@@ -105,7 +105,7 @@ const Index = () => {
   );
 };
 
-export default observer(Index);
+export default observer(Signin);
 
 const Header = styled.header`
   width: 100%;
