@@ -1,41 +1,24 @@
 import React, {
-  ChangeEvent, memo, useMemo, useState, KeyboardEvent, useCallback,
+  ChangeEvent, useMemo, KeyboardEvent, useCallback, useEffect,
 } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { observer } from 'mobx-react';
 
 import getValidationUser from '@lib/utils/getValidationUser';
-import { requestPost } from '@lib/api/client';
 import alert from '@components/alert/Alert';
 import AuthContainer from '@components/form/auth/AuthContainer';
 import Layout from '@components/layout/Layout';
 import { useStores } from '@lib/store/stores';
 
-interface User {
-  disabled: number;
-  email: string;
-  id: number;
-  name: string;
-  role: number;
-  type: number;
-  user_token: string;
-}
-
 const Index = () => {
   const router = useRouter();
   const { userStore } = useStores();
 
-  const [user, setUser] = useState<{ email: string, password: string }>({
-    email: '',
-    password: '',
-  });
-
-  const [userValidation, setUserValidation] = useState<{ email: boolean, password: boolean }>({
-    email: false,
-    password: false,
-  });
-
-  const isUserValidation = useMemo(() => (userValidation.email && userValidation.password) === false, [userValidation]);
+  const isUserValidation = useMemo(() => !(
+    userStore.userValidation.email
+    && userStore.userValidation.password
+  ), [userStore.userValidation]);
 
   const handleClickPrev = useCallback(() => {
     router.back();
@@ -43,38 +26,30 @@ const Index = () => {
 
   const onChangeUser = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const regexp = getValidationUser(name as 'email' | 'password' | 'name', value);
+    const regexp = getValidationUser(name as 'email' | 'password', value);
 
-    setUser({
-      ...user,
+    userStore.signUser = ({
+      ...userStore.signUser,
       [name]: value,
     });
 
-    setUserValidation({
-      ...userValidation,
+    userStore.userValidation = ({
+      ...userStore.userValidation,
       [name]: regexp,
     });
-  }, [user, userValidation]);
+  }, [userStore.signUser, userStore.userValidation]);
 
   const onClickSignIn = useCallback(async () => {
-    try {
-      const userInfo = await requestPost({
-        url: '/user/signin',
-        data: {
-          email: user.email,
-          password: user.password,
-        },
-      });
-      const userData: User = userInfo.data.data.user;
-      localStorage.setItem('user', JSON.stringify(userData));
+    const isSignIn = await userStore.signinUser();
+    if (isSignIn) {
       router.push('/main/calendar');
-    } catch (e) {
-      alert.error({
-        title: '로그인에 실패했어요.',
-        desc: '회원 정보가 올바르지 않아요.',
-      });
+      return;
     }
-  }, [user]);
+    alert.error({
+      title: '로그인에 실패했어요.',
+      desc: '회원 정보가 올바르지 않아요.',
+    });
+  }, [userStore.user]);
 
   const handleClickSignUp = useCallback(() => {
     router.push('/signup');
@@ -85,6 +60,10 @@ const Index = () => {
       onClickSignIn();
     }
   }, [isUserValidation, onClickSignIn]);
+
+  useEffect(() => {
+    userStore.resetSignUser();
+  }, []);
 
   return (
     <Layout>
@@ -99,14 +78,14 @@ const Index = () => {
           label="이메일"
           id="email"
           type="email"
-          value={user.email}
+          value={userStore.signUser.email}
           onChange={onChangeUser}
         />
         <AuthContainer
           label="비밀번호"
           id="password"
           type="password"
-          value={user.password}
+          value={userStore.signUser.password}
           onChange={onChangeUser}
           onKeyPress={onPressEnter}
         />
@@ -126,7 +105,7 @@ const Index = () => {
   );
 };
 
-export default memo(Index);
+export default observer(Index);
 
 const Header = styled.header`
   width: 100%;

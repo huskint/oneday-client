@@ -3,13 +3,23 @@ import { observable } from 'mobx';
 import { User, UserValidation } from '@lib/interface/user.interface';
 import getValidationUser from '@lib/utils/getValidationUser';
 import { signupUserApi } from '@lib/api/user/signupUserApi';
+import { signinUserApi } from '@lib/api/user/signinUserApi';
+
+const initialSignUser: User = {
+  email: '',
+  password: '',
+  passwordCheck: '',
+  name: '',
+};
 
 interface Store {
   user: Pick<User, 'email' | 'name'>;
   signUser: User;
   userValidation: UserValidation;
+  resetSignUser: () => void;
   onChangeSignUp: (name: string, value: string) => void;
   signupUser: () => Promise<boolean>;
+  signinUser: () => Promise<boolean>;
 }
 
 export const store: Store = {
@@ -18,12 +28,7 @@ export const store: Store = {
     name: '',
   },
 
-  signUser: {
-    email: '',
-    password: '',
-    passwordCheck: '',
-    name: '',
-  },
+  signUser: initialSignUser,
 
   userValidation: {
     email: false,
@@ -32,14 +37,20 @@ export const store: Store = {
     name: false,
   },
 
+  resetSignUser() {
+    this.signUser = initialSignUser;
+  },
+
   onChangeSignUp(name: string, value: string) {
     const regexpCheckList = ['email', 'password', 'name'];
-    let test: boolean = false;
+    let regexp: boolean = false;
+
     if (regexpCheckList.includes(name)) {
-      test = getValidationUser(name as 'email' | 'password' | 'name', value);
+      regexp = getValidationUser(name as 'email' | 'password' | 'name', value);
     }
+
     if (name === 'passwordCheck') {
-      test = this.signUser.password === value;
+      regexp = this.signUser.password === value;
     }
 
     this.signUser = ({
@@ -49,7 +60,7 @@ export const store: Store = {
 
     this.userValidation = ({
       ...this.userValidation,
-      [name]: test,
+      [name]: regexp,
     });
   },
 
@@ -61,6 +72,21 @@ export const store: Store = {
         name: this.signUser.name,
       };
       const response = await signupUserApi(params);
+      const userData: User = response.data.data.user;
+      localStorage.setItem('user', JSON.stringify(userData));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  async signinUser() {
+    try {
+      const params = {
+        email: this.signUser.email,
+        password: this.signUser.password,
+      };
+      const response = await signinUserApi(params);
       const userData: User = response.data.data.user;
       localStorage.setItem('user', JSON.stringify(userData));
       return true;
