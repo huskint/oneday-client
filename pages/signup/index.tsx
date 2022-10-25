@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent, useCallback, useMemo,
+  ChangeEvent, useCallback, useEffect, useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -14,7 +14,17 @@ const Index = () => {
   const router = useRouter();
   const { userStore } = useStores();
 
-  const isDisabledSignUp = useMemo(() => !(userStore.userValidation.email && userStore.userValidation.password && userStore.userValidation.passwordCheck && userStore.userValidation.name), [userStore.userValidation]);
+  const onChangeIsTerm = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    userStore.isTerm = e.target.checked;
+  }, []);
+
+  const isDisabledSignUp = useMemo(() => !(
+    userStore.userValidation.email
+    && userStore.userValidation.password
+    && userStore.userValidation.passwordCheck
+    && userStore.userValidation.name
+    && userStore.isTerm
+  ), [userStore.userValidation, userStore.isTerm]);
 
   const handleClickPrev = useCallback(() => {
     router.back();
@@ -39,6 +49,10 @@ const Index = () => {
       title: '회원가입에 실패했어요.',
       desc: '계속 문제가 발생하면 관리자에게 문의해 주세요.',
     });
+  }, []);
+
+  useEffect(() => {
+    userStore.resetSignUser();
   }, []);
 
   return (
@@ -101,7 +115,11 @@ const Index = () => {
         <SignUpCheckContainer>
           <Check>
             <CheckBoxLabel>
-              <InputBox type="checkbox" />
+              <InputBox
+                type="checkbox"
+                checked={userStore.isTerm}
+                onChange={onChangeIsTerm}
+              />
             </CheckBoxLabel>
             <span>[필수] 개인정보 수집 및 이용 동의</span>
           </Check>
@@ -191,13 +209,6 @@ const Input = styled.input<{ isError?: boolean }>`
   &:focus-visible {
     outline: ${(props) => (props.isError ? '0.5px solid #d21111' : '0.5px solid #a2cbfdba')};
   }
-`;
-
-const ErrorMsg = styled.span`
-  margin-top: 7px;
-  padding-left: 4px;
-  font-size: 12px;
-  color: #d21111;
 `;
 
 const SignUpCheckContainer = styled.article`
