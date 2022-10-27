@@ -11,7 +11,7 @@ import AuthContainer from '@components/form/auth/AuthContainer';
 import Layout from '@components/layout/Layout';
 import { useStores } from '@lib/store/stores';
 
-const Signin = () => {
+const SigninPage = () => {
   const router = useRouter();
   const { userStore } = useStores();
 
@@ -62,7 +62,7 @@ const Signin = () => {
   }, [isUserValidation, onClickSignIn]);
 
   useEffect(() => {
-    userStore.resetSignUser();
+    userStore.resetSignUp();
   }, []);
 
   return (
@@ -105,7 +105,7 @@ const Signin = () => {
   );
 };
 
-export default observer(Signin);
+export default observer(SigninPage);
 
 const Header = styled.header`
   width: 100%;

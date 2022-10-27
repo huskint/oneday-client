@@ -17,7 +17,7 @@ interface Store {
   signUser: User;
   userValidation: UserValidation;
   isTerm: boolean;
-  resetSignUser: () => void;
+  resetSignUp: () => void;
   onChangeSignUp: (name: string, value: string) => void;
   signupUser: () => Promise<boolean>;
   signinUser: () => Promise<boolean>;
@@ -40,8 +40,9 @@ export const store: Store = {
 
   isTerm: false,
 
-  resetSignUser() {
+  resetSignUp() {
     this.signUser = initialSignUser;
+    this.isTerm = false;
   },
 
   onChangeSignUp(name: string, value: string) {

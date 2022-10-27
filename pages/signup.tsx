@@ -10,7 +10,7 @@ import alert from '@components/alert/Alert';
 import AuthContainer from '@components/form/auth/AuthContainer';
 import { useStores } from '@lib/store/stores';
 
-const Signup = () => {
+const SignupPage = () => {
   const router = useRouter();
   const { userStore } = useStores();
 
@@ -52,7 +52,7 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    userStore.resetSignUser();
+    userStore.resetSignUp();
   }, []);
 
   return (
@@ -138,7 +138,7 @@ const Signup = () => {
   );
 };
 
-export default observer(Signup);
+export default observer(SignupPage);
 
 const Header = styled.header`
   width: 100%;
