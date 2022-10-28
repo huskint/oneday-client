@@ -12,6 +12,13 @@ const initialSignUser: User = {
   name: '',
 };
 
+const initialUserValidation: UserValidation = {
+  email: false,
+  password: false,
+  passwordCheck: false,
+  name: false,
+};
+
 interface Store {
   user: Pick<User, 'email' | 'name'>;
   signUser: User;
@@ -31,17 +38,13 @@ export const store: Store = {
 
   signUser: initialSignUser,
 
-  userValidation: {
-    email: false,
-    password: false,
-    passwordCheck: false,
-    name: false,
-  },
+  userValidation: initialUserValidation,
 
   isTerm: false,
 
   resetSignUp() {
     this.signUser = initialSignUser;
+    this.userValidation = initialUserValidation;
     this.isTerm = false;
   },
 
